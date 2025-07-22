@@ -13,7 +13,7 @@ function ProviderOrdersPage() {
   useEffect(() => {
     if (!user) return;
     setLoading(true);
-    fetch('http://localhost:3001/api/bookings')
+    fetch('https://myclean-backend.onrender.com/api/bookings')
       .then(res => res.json())
       .then(data => {
         const myOrders = data.filter(order => order.providerId === user.id);
@@ -30,7 +30,7 @@ function ProviderOrdersPage() {
     const body = { status: newStatus };
     if (rejectReason) body.rejectReason = rejectReason;
 
-    const res = await fetch(`http://localhost:3001/api/bookings/${orderId}`, {
+    const res = await fetch(`https://myclean-backend.onrender.com/api/bookings/${orderId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),

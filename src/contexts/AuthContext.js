@@ -29,7 +29,8 @@ export function AuthProvider({ children }) {
   const refreshUser = async () => {
     if (!user?.id) return;
     try {
-      const res = await fetch(`http://localhost:3001/api/users/${user.id}`);
+      const res = await fetch(`https://myclean-backend.onrender.com/api/users/${user.id}`);
+
       if (res.ok) {
         const updatedUser = await res.json();
         setUser(updatedUser);

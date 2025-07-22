@@ -5,6 +5,8 @@ import { Container, Typography, Box, Button, Paper } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
+const API_BASE_URL = 'https://myclean-backend.onrender.com'; // 线上后端地址，换成你的
+
 function CustomerBookings() {
   const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
@@ -15,26 +17,30 @@ function CustomerBookings() {
     if (!user) return;
 
     const fetchData = async () => {
-      const bookingsRes = await fetch('http://localhost:3001/api/bookings');
-      const bookingsData = await bookingsRes.json();
+      try {
+        const bookingsRes = await fetch(`${API_BASE_URL}/api/bookings`);
+        const bookingsData = await bookingsRes.json();
 
-      const myBookings = bookingsData
-        .map(b => ({
-          rating: null,
-          ...b,
-        }))
-        .filter(b => b.customerId === user.id);
+        const myBookings = bookingsData
+          .map(b => ({
+            rating: null,
+            ...b,
+          }))
+          .filter(b => b.customerId === user.id);
 
-      setBookings(myBookings);
+        setBookings(myBookings);
 
-      const usersRes = await fetch('http://localhost:3001/api/users');
-      const usersData = await usersRes.json();
+        const usersRes = await fetch(`${API_BASE_URL}/api/users`);
+        const usersData = await usersRes.json();
 
-      const providerNames = {};
-      usersData.forEach(u => {
-        providerNames[u.id] = u.name;
-      });
-      setProviders(providerNames);
+        const providerNames = {};
+        usersData.forEach(u => {
+          providerNames[u.id] = u.name;
+        });
+        setProviders(providerNames);
+      } catch (error) {
+        console.error('Failed to fetch bookings or users:', error);
+      }
     };
 
     fetchData();
@@ -46,26 +52,31 @@ function CustomerBookings() {
       return;
     }
 
-    const res = await fetch(`http://localhost:3001/api/bookings/${orderId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rating }),
-    });
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/bookings/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rating }),
+      });
 
-    if (res.ok) {
-      setBookings(prev =>
-        prev.map(b =>
-          b.id === orderId
-            ? {
-                ...b,
-                rating,
-              }
-            : b
-        )
-      );
-      alert('Thank you for your rating!');
-    } else {
+      if (res.ok) {
+        setBookings(prev =>
+          prev.map(b =>
+            b.id === orderId
+              ? {
+                  ...b,
+                  rating,
+                }
+              : b
+          )
+        );
+        alert('Thank you for your rating!');
+      } else {
+        alert('Failed to submit rating.');
+      }
+    } catch (error) {
       alert('Failed to submit rating.');
+      console.error('Rating update error:', error);
     }
   };
 
@@ -196,7 +207,7 @@ function CustomerBookings() {
       <Header />
       <Box
         sx={{
-          minHeight: 'calc(100vh - 128px)', // 留出 header/footer 高度
+          minHeight: 'calc(100vh - 128px)',
           backgroundImage: `url('/images/booking-background.jpg')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',

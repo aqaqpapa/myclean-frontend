@@ -10,7 +10,7 @@ function PaymentPage() {
   const [showPaymentCode, setShowPaymentCode] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/bookings/${orderId}`)
+    fetch(`https://myclean-backend.onrender.com/api/bookings/${orderId}`)
       .then(res => res.json())
       .then(data => setOrder(data))
       .catch(err => {
@@ -24,7 +24,7 @@ function PaymentPage() {
     if (!order) return;
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:3001/api/bookings/${orderId}`, {
+      const res = await fetch(`https://myclean-backend.onrender.com/api/bookings/${orderId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'paid' }),

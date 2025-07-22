@@ -13,7 +13,7 @@ function CustomerLogin() {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/login', {
+      const res = await fetch('https://myclean-backend.onrender.com/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -43,7 +43,7 @@ function CustomerLogin() {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        backgroundImage: `url('/images/customer_login_bg.jpg')`, // ✅ 背景图
+        backgroundImage: `url('/images/customer_login_bg.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -51,7 +51,6 @@ function CustomerLogin() {
     >
       <Header />
 
-      {/* 主体内容区域 - 让登录框垂直居中 */}
       <Box
         sx={{
           flexGrow: 1,
@@ -65,7 +64,7 @@ function CustomerLogin() {
           maxWidth="xs"
           sx={{
             p: 4,
-            bgcolor: 'rgba(230, 240, 250, 0.9)', // 半透明背景
+            bgcolor: 'rgba(230, 240, 250, 0.9)',
             borderRadius: 3,
             boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
           }}

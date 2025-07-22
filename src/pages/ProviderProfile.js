@@ -72,7 +72,7 @@ function ProviderProfile() {
     };
 
     try {
-      const res = await fetch(`http://localhost:3001/api/users/${user.id}`, {
+      const res = await fetch(`https://myclean-backend.onrender.com/api/users/${user.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedUser),

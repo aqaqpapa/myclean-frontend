@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
+const API_BASE = 'https://myclean-backend.onrender.com';  // 线上后端地址
+
 function CustomerOrderPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -45,7 +47,7 @@ function CustomerOrderPage() {
   };
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/users')
+    fetch(`${API_BASE}/api/users`)
       .then(res => res.json())
       .then(data => {
         const filtered = data.filter(u => u.role === 'Provider' && u.available);
@@ -53,7 +55,7 @@ function CustomerOrderPage() {
       })
       .catch(err => console.error('Failed to load providers:', err));
 
-    fetch('http://localhost:3001/api/bookings')
+    fetch(`${API_BASE}/api/bookings`)
       .then(res => res.json())
       .then(data => setBookings(data))
       .catch(err => console.error('Failed to load bookings:', err));
@@ -118,7 +120,6 @@ function CustomerOrderPage() {
     return start < end;
   };
 
-  // 新：先触发确认弹窗或跳转，确认后才调用真正提交
   const handleConfirmBooking = () => {
     if (!user) return alert('Please login first.');
     if (!orderDetails.date) return alert('Please select a date.');
@@ -127,18 +128,15 @@ function CustomerOrderPage() {
     }
     if (!selectedProvider) return alert('Please select a provider.');
 
-    // 判断用户地址是否为空
     if (!user.location || user.location.trim() === '') {
       alert('Your address is empty. Please complete your profile address first.');
       navigate('/edit-profile');
       return;
     }
 
-    // 地址不为空，显示确认订单弹窗
     setShowConfirmModal(true);
   };
 
-  // 确认弹窗里用户点“确认”后调用真正提交
   const handleSubmitOrder = async () => {
     setShowConfirmModal(false);
     setLoading(true);
@@ -162,7 +160,7 @@ function CustomerOrderPage() {
     };
 
     try {
-      const res = await fetch('http://localhost:3001/api/bookings', {
+      const res = await fetch(`${API_BASE}/api/bookings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newOrder),
@@ -190,7 +188,6 @@ function CustomerOrderPage() {
       <div style={pageStyle}>
         <h2 style={titleStyle}>Browse Cleaning Service Providers</h2>
 
-        {/* 搜索框 */}
         <div style={{ marginBottom: 20 }}>
           <label style={{ fontWeight: 'bold', fontSize: 16, marginRight: 8 }}>
             Search by service type:
@@ -204,7 +201,6 @@ function CustomerOrderPage() {
           />
         </div>
 
-        {/* 排序选择 */}
         <div style={{ marginBottom: 20 }}>
           <label style={{ fontWeight: 'bold', fontSize: 16, marginRight: 8 }}>Sort by:</label>
           <select
@@ -217,7 +213,6 @@ function CustomerOrderPage() {
           </select>
         </div>
 
-        {/* 服务提供者列表 */}
         <div style={providerListStyle}>
           {sortedProviders.length === 0 ? (
             <p>No providers match your search.</p>
@@ -250,7 +245,6 @@ function CustomerOrderPage() {
           )}
         </div>
 
-        {/* 评论弹窗 */}
         {showCommentsFor && (
           <div onClick={() => setShowCommentsFor(null)} style={modalBackdropStyle}>
             <div style={modalStyle} onClick={e => e.stopPropagation()}>
@@ -276,7 +270,6 @@ function CustomerOrderPage() {
           </div>
         )}
 
-        {/* 下单弹窗 */}
         {selectedProvider && (
           <div style={modalBackdropStyle} onClick={() => setSelectedProvider(null)}>
             <div style={modalStyle} onClick={e => e.stopPropagation()}>
@@ -334,7 +327,6 @@ function CustomerOrderPage() {
                 style={textareaStyle}
               />
 
-              {/* 这里改为先调用确认弹窗 */}
               <button
                 disabled={loading}
                 onClick={handleConfirmBooking}
@@ -353,7 +345,6 @@ function CustomerOrderPage() {
           </div>
         )}
 
-        {/* 确认订单弹窗 */}
         {showConfirmModal && (
           <div style={modalBackdropStyle} onClick={() => setShowConfirmModal(false)}>
             <div style={modalStyle} onClick={e => e.stopPropagation()}>
@@ -396,7 +387,6 @@ function CustomerOrderPage() {
   );
 }
 
-// 样式定义（和你之前代码一致）
 const pageStyle = {
   backgroundColor: '#f5f9f8',
   minHeight: '100vh',

@@ -12,7 +12,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost:3001/api/login', {
+    const res = await fetch('https://myclean-backend.onrender.com/api/login', {  // 改成线上地址
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)

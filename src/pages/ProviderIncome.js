@@ -11,7 +11,7 @@ function ProviderIncomeStats() {
   useEffect(() => {
     if (!user) return;
 
-    fetch('http://localhost:3001/api/bookings')
+    fetch('https://myclean-backend.onrender.com/api/bookings')
       .then(res => res.json())
       .then(data => {
         const completedOrders = data.filter(order =>
