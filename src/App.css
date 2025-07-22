@@ -1,6 +1,23 @@
 .App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;         /* 100%视口高度，确保满屏 */
+  width: 100vw;          /* 100%视口宽度 */
+  margin: 0;             /* 清除默认外边距 */
+  padding: 0;
+  box-sizing: border-box;
   text-align: center;
 }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+
 
 .App-logo {
   height: 40vmin;
@@ -35,4 +52,18 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f3f3f3;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #e0e0e0;
 }
